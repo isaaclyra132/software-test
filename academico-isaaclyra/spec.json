@@ -1,0 +1,65 @@
+[{
+	"operation": {
+		"classname": "imd0412.academic.GradeModule",
+		"name": "performPartialConsolidation",
+		"parameterTypes": [
+			"java.lang.Float", "java.lang.Float", "java.lang.Float", "java.lang.Integer"
+		]
+	},
+	"identifiers": {
+		"parameters": ["grade1", "grade2", "grade3", "attendanceFrequency"],
+		"receiverName": "receiver",
+		"returnName": "result"
+	},
+	"throws": [],
+	"post": [
+	{
+        "property": {
+          "condition": "result == ApprovalStatus.REPF || result == ApprovalStatus.REP || result == ApprovalStatus.REC || result == ApprovalStatus.APR || result == ApprovalStatus.APRN || result == ApprovalStatus.REMF",
+          "description": "result is enum"
+        },
+        "description": "returns enum",
+        "guard": {
+          "condition": "true",
+          "description": ""
+        }
+      }
+	],
+	"pre": [
+	{
+        "description": "grade1",
+        "guard": {
+          "condition": "grade1 >= 0.0f && grade1 <= 10.0f && grade1 != null",
+          "description": "grade1"
+        }
+	}, 
+	{
+        "description": "grade2",
+        "guard": {
+          "condition": "grade2 >= 0.0f && grade2 <= 10.0f && grade2 != null",
+          "description": "grade2"
+        }
+	}, 
+	{
+        "description": "grade3",
+        "guard": {
+          "condition": "grade3 >= 0.0f && grade3 <= 10.0f && grade3 != null",
+          "description": "grade3"
+        }
+	}, 
+	{
+        "description": "grade3",
+        "guard": {
+          "condition": "grade3 >= 0.0f && grade3 <= 10.0f && grade3 != null",
+          "description": "grade3"
+        }
+	}, 
+	{
+        "description": "attendanceFrequency",
+        "guard": {
+          "condition": "attendanceFrequency >= 0 && attendanceFrequency <= 100 && attendanceFrequency != null",
+          "description": "attendanceFrequency"
+        }
+	}
+	]
+}]
