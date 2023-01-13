@@ -7,12 +7,13 @@ import java.math.RoundingMode;
 
 public class BigDecimalUtils {
 	private static final BigDecimal VALOR_3 = new BigDecimal("3");
+	private static final BigDecimal SOMA_MEDIAS = new BigDecimal(4+5+6);
 
 	public static boolean eMenorQue(BigDecimal op1, BigDecimal op2) {
 		return op1.compareTo(op2) < 0;
 	}
 
-	public static boolean eMenorQue(BigDecimal op, int i) {
+	public static boolean eMenorQue(BigDecimal op, double i) {
 		return eMenorQue(op, new BigDecimal(i));
 	}
 
@@ -24,7 +25,7 @@ public class BigDecimalUtils {
 		return op1.compareTo(op2) >= 0;
 	}
 
-	public static boolean eMaiorIgualQue(BigDecimal op, int i) {
+	public static boolean eMaiorIgualQue(BigDecimal op, double i) {
 		return eMaiorIgualQue(op, new BigDecimal(i));
 	}
 
@@ -41,8 +42,10 @@ public class BigDecimalUtils {
 	}
 
 	public static BigDecimal calcularMedia(BigDecimal op1, BigDecimal op2, BigDecimal op3) {
-		BigDecimal somatorio = op1.add(op2).add(op3);
-		BigDecimal media = somatorio.divide(VALOR_3, RoundingMode.HALF_EVEN);
+		BigDecimal somatorio = op1.multiply(BigDecimal.valueOf(4.0))
+				.add(op2.multiply(BigDecimal.valueOf(5.0)))
+				.add(op3.multiply(BigDecimal.valueOf(6.0)));
+		BigDecimal media = somatorio.divide(SOMA_MEDIAS, RoundingMode.HALF_UP);
 
 		return media;
 	}

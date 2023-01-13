@@ -31,6 +31,9 @@ public final class Matricula {
 
 	private StatusAprovacao statusParcial;
 
+	public Matricula() {
+	}
+
 	public Matricula(Discente discente, Turma turma) {
 		this.discente = discente;
 		this.turma = turma;
@@ -44,15 +47,11 @@ public final class Matricula {
 		this.statusParcial = null;
 	}
 
-    public Matricula() {
-
-    }
-
 	protected void consolidarParcialmente() 
 	{
 		var media = calcularMedia(nota1(), nota2(), nota3());
 		
-		if (eMenorQue(frequencia, 75)) 
+		if (eMenorQue(frequencia, 80))
 		{
 			if(eMenorQue(media, 5)) 
 			{
@@ -65,14 +64,13 @@ public final class Matricula {
 		} 
 		else 
 		{
-			if(eMaiorIgualQue(media, 7)) 
+			if(eMaiorIgualQue(media, 7.5))
 			{
 				this.statusParcial = StatusAprovacao.APR;
 			}
-			else if(eMaiorIgualQue(media, 5))
+			else if(eMaiorIgualQue(media, 6))
 			{
-				
-				if(eMaiorIgualQue(nota1, 3) && eMaiorIgualQue(nota2, 3) && eMaiorIgualQue(nota3, 3)) 
+				if(eMaiorIgualQue(nota1, 3) && eMaiorIgualQue(nota2, 3) && eMaiorIgualQue(nota3, 3))
 				{
 					this.statusParcial = StatusAprovacao.APRN;
 				}
@@ -80,7 +78,17 @@ public final class Matricula {
 					this.statusParcial = StatusAprovacao.REC;
 				}
 			}
-			else if(eMaiorIgualQue(media, 3)) 
+			else if(eMaiorIgualQue(media, 5))
+			{
+				if(eMaiorIgualQue(nota1, 4) && eMaiorIgualQue(nota2, 4) && eMaiorIgualQue(nota3, 4))
+				{
+					this.statusParcial = StatusAprovacao.APRN;
+				}
+				else {
+					this.statusParcial = StatusAprovacao.REC;
+				}
+			}
+			else if(eMaiorIgualQue(media, 3))
 			{
 				this.statusParcial = StatusAprovacao.REC;
 			}

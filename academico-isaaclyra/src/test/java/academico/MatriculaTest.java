@@ -12,13 +12,15 @@ class MatriculaTest {
 
     @ParameterizedTest
     @CsvSource(value = {
-            "100, 7.5, 7.5, 7.5, APR",
-            "100, 5.5, 5.5, 5.5, APRN",
+            "80, 10, 10, 10, APR",
+            "80, 10, 6.5, 8, APR",
+            "80, 4, 4, 8, APRN",
+            "80, 3.5, 3.5, 10, APRN",
             "100, 2.5, 5.5, 5.5, REC",
             "100, 2.5, 5.5, 8.5, REC",
             "100, 2.5, 2.5, 2.5, REP",
-            "50, 5.5, 5.5, 5.5, REPF",
-            "50, 2.5, 2.5, 2.5, REMF"
+            "79, 5.5, 5.5, 5.5, REPF",
+            "79, 2.5, 2.5, 2.5, REMF"
     })
     void consolidarParcialmente(
             BigDecimal frequencia,
