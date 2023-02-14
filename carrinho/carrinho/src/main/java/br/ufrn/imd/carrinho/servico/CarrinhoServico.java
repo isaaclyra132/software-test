@@ -98,12 +98,6 @@ public class CarrinhoServico {
 	}
 
 	public Pedido finalizar(Usuario usuario, List<Item> itens, LocalDate checkoutDate) {
-//		DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
-//		decimalFormat.setRoundingMode(RoundingMode.UP);
-
-//		var precoItens = calcularPrecoItens(itens);
-//		var precoFrete = calcularFrete(usuario.getEndereco().getEstado(), itens);
-//		var precoTotal = precoItens + precoFrete;
 		BigDecimal precoItens = new BigDecimal(
 				calcularPrecoItens(itens)
 		).setScale(2, RoundingMode.HALF_UP);
@@ -119,7 +113,6 @@ public class CarrinhoServico {
 				precoItens.doubleValue(),
 				precoFrete.doubleValue(),
 				checkoutDate);
-
 
 		return pedido;
 	}
