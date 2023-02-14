@@ -1,5 +1,6 @@
 package br.ufrn.imd.carrinho.servico;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
@@ -58,9 +59,9 @@ public class CarrinhoServico {
 
 		if(pesoTotal <= 10.0) {
 			precoFrete = 0.0;
-		} else if (pesoTotal > 10.0 || pesoTotal<= 40.0) {
+		} else if (pesoTotal > 10.0 && pesoTotal<= 40.0) {
 			precoFrete = pesoTotal * 0.5;
-		} else if (pesoTotal > 40.0 || pesoTotal <= 100.0) {
+		} else if (pesoTotal > 40.0 && pesoTotal <= 100.0) {
 			precoFrete = pesoTotal * 0.75;
 		} else {
 			precoFrete = pesoTotal;
@@ -78,7 +79,7 @@ public class CarrinhoServico {
 				.filter(estado -> estado == estadoDoUsuario)
 				.collect(Collectors.toList());
 
-		if (testeRegiao.isEmpty()) {
+		if (testeRegiao.isEmpty())  {
 			return true;
 		}
 		return false;
@@ -100,16 +101,23 @@ public class CarrinhoServico {
 //		DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
 //		decimalFormat.setRoundingMode(RoundingMode.UP);
 
-		var precoItens = calcularPrecoItens(itens);
-		var precoFrete = calcularFrete(usuario.getEndereco().getEstado(), itens);
-		var precoTotal = precoItens + precoFrete;
+//		var precoItens = calcularPrecoItens(itens);
+//		var precoFrete = calcularFrete(usuario.getEndereco().getEstado(), itens);
+//		var precoTotal = precoItens + precoFrete;
+		BigDecimal precoItens = new BigDecimal(
+				calcularPrecoItens(itens)
+		).setScale(2, RoundingMode.HALF_UP);
+		BigDecimal precoFrete = new BigDecimal(
+				calcularFrete(usuario.getEndereco().getEstado(), itens)
+		).setScale(2, RoundingMode.HALF_UP);
+		BigDecimal precoTotal = precoItens.add(precoFrete).setScale(2, RoundingMode.HALF_UP);
 
 		Pedido pedido = new Pedido(
 				usuario,
 				itens,
-				precoTotal,
-				precoItens,
-				precoFrete,
+				precoTotal.doubleValue(),
+				precoItens.doubleValue(),
+				precoFrete.doubleValue(),
 				checkoutDate);
 
 
