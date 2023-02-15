@@ -18,17 +18,17 @@ public class CarrinhoServicoTest {
 	@ParameterizedTest(name = "[{index}]''{0}'' => Preço esperado com desconto: {7}")
 	@CsvSource({
 			"PrecoItensMenor500SemRepeticao, 200, 200, 99, CASA, COZINHA, ELETRONICO, 499.0",
-			"PrecoItensMenor500ComRepeticao, 200, 200, 99, LIVROS, LIVROS, LIVROS, 523.95",
+			"PrecoItensMenor500ComRepeticao, 200, 200, 99, LIVROS, LIVROS, LIVROS, 474.05",
 			"PrecoItensIgual500SemRepeticao, 200, 200, 100, COZINHA, ELETRONICO, LIVROS, 500.0",
-			"PrecoItensIgual500ComRepeticao, 200, 200, 100, ROUPAS, ROUPAS, ROUPAS, 525.0",
-			"PrecoItensMaior500SemRepeticao, 200, 200, 101, ELETRONICO, LIVROS, ROUPAS, 551.1",
-			"PrecoItensMaior500ComRepeticao, 200, 200, 101, CASA, CASA, CASA, 551.1",
-			"PrecoItensMenor1000SemRepeticao, 400, 400, 199, LIVROS, ROUPAS, CASA, 1098.9",
-			"PrecoItensMenor1000ComRepeticao, 400, 400, 199, COZINHA, COZINHA, COZINHA, 1098.9",
-			"PrecoItensIgual1000SemRepeticao, 400, 400, 200, ROUPAS, CASA, COZINHA, 1100.0",
-			"PrecoItensIgual1000ComRepeticao, 400, 400, 200, ELETRONICO, ELETRONICO, ELETRONICO, 1100.0",
-			"PrecoItensMaior1000SemRepeticao, 400, 400, 201, CASA, COZINHA, ELETRONICO, 1201.2",
-			"PrecoItensMaior1000ComRepeticao, 400, 400, 201, LIVROS, LIVROS, LIVROS, 1201.2",
+			"PrecoItensIgual500ComRepeticao, 200, 200, 100, ROUPAS, ROUPAS, ROUPAS, 475.0",
+			"PrecoItensMaior500SemRepeticao, 200, 200, 101, ELETRONICO, LIVROS, ROUPAS, 450.9",
+			"PrecoItensMaior500ComRepeticao, 200, 200, 101, CASA, CASA, CASA, 450.9",
+			"PrecoItensMenor1000SemRepeticao, 400, 400, 199, LIVROS, ROUPAS, CASA, 899.1",
+			"PrecoItensMenor1000ComRepeticao, 400, 400, 199, COZINHA, COZINHA, COZINHA, 899.1",
+			"PrecoItensIgual1000SemRepeticao, 400, 400, 200, ROUPAS, CASA, COZINHA, 900",
+			"PrecoItensIgual1000ComRepeticao, 400, 400, 200, ELETRONICO, ELETRONICO, ELETRONICO, 900",
+			"PrecoItensMaior1000SemRepeticao, 400, 400, 201, CASA, COZINHA, ELETRONICO, 800.8",
+			"PrecoItensMaior1000ComRepeticao, 400, 400, 201, LIVROS, LIVROS, LIVROS, 800.8",
 	})
 	public void TestePrecoItens(String nomeTeste,
 								Double precoItem1,
@@ -92,11 +92,11 @@ public class CarrinhoServicoTest {
 	@ParameterizedTest(name = "[{index}]''{0}'' => Preço Total Esperado: {11}")
 	@CsvSource({
 			"PrecoMenor500SemRepeticaoPesoMaior40Nordeste, 200, 200, 99, CASA, COZINHA, ELETRONICO, 35, 4, 2, BA, 529.75",
-			"PrecoIgual500ComRepeticaoPesoMenor100Norte, 200, 200, 100, ROUPAS, ROUPAS, ROUPAS, 45, 45, 9, AC, 606.68",
-			"PrecoMaior500SemRepeticaoPesoMenor10Sul, 200, 200, 101, ELETRONICO, LIVROS, ROUPAS, 3.3, 3.3, 3.3, SC, 551.1",
-			"PrecoMenor1000SemRepeticaoPesoMaior10Sul, 400, 400, 199, LIVROS, ROUPAS, CASA, 4, 4, 4, RS, 1105.5",
-			"PrecoIgual1000SemRepeticaoPesoMaior40Nordeste, 400, 400, 200, ROUPAS, CASA, COZINHA, 35, 4, 2, BA, 1130.75",
-			"PrecoMaior1000SemRepeticaoPesoMaior100Sudeste, 400, 400, 201, CASA, COZINHA, ELETRONICO, 45, 45, 11, SE, 1302.2"
+			"PrecoIgual500ComRepeticaoPesoMenor100Norte, 200, 200, 100, ROUPAS, ROUPAS, ROUPAS, 45, 45, 9, AC, 556.68",
+			"PrecoMaior500SemRepeticaoPesoMenor10Sul, 200, 200, 101, ELETRONICO, LIVROS, ROUPAS, 3.3, 3.3, 3.3, SC, 450.9",
+			"PrecoMenor1000SemRepeticaoPesoMaior10Sul, 400, 400, 199, LIVROS, ROUPAS, CASA, 4, 4, 4, RS, 905.7",
+			"PrecoIgual1000SemRepeticaoPesoMaior40Nordeste, 400, 400, 200, ROUPAS, CASA, COZINHA, 35, 4, 2, BA, 930.75",
+			"PrecoMaior1000SemRepeticaoPesoMaior100Sudeste, 400, 400, 201, CASA, COZINHA, ELETRONICO, 45, 45, 11, SE, 901.8"
 	})
 	public void TestePrecoTotal(String nomeTeste,
 								Double precoItem1,
