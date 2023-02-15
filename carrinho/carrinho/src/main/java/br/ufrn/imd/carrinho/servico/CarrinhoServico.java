@@ -2,7 +2,6 @@ package br.ufrn.imd.carrinho.servico;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -88,13 +87,13 @@ public class CarrinhoServico {
 	Boolean elegivelDescontoItemTipo(List<Item> itens) {
 		Set<ItemTipo> tiposDuplicados = new HashSet<>();
 
-		if(itens.stream()
+		if(!itens.stream()
 				.filter(item -> !tiposDuplicados.add(item.getTipo()))
 				.collect(Collectors.toList()).isEmpty()) {
-			return false;
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 
 	public Pedido finalizar(Usuario usuario, List<Item> itens, LocalDate checkoutDate) {
@@ -106,14 +105,13 @@ public class CarrinhoServico {
 		).setScale(2, RoundingMode.HALF_UP);
 		BigDecimal precoTotal = precoItens.add(precoFrete).setScale(2, RoundingMode.HALF_UP);
 
-		Pedido pedido = new Pedido(
+		return new Pedido(
 				usuario,
 				itens,
 				precoTotal.doubleValue(),
 				precoItens.doubleValue(),
 				precoFrete.doubleValue(),
 				checkoutDate);
-
-		return pedido;
+//		return pedido;
 	}
 }

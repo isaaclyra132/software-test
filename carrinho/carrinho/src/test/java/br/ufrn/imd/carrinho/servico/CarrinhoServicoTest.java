@@ -2,7 +2,6 @@ package br.ufrn.imd.carrinho.servico;
 
 import br.ufrn.imd.carrinho.dominio.*;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,13 +9,46 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 
 public class CarrinhoServicoTest {
 
 	final CarrinhoServico service = new CarrinhoServico();
 
-	@Test
+	@DisplayName("Deve ser aplicado descontos de acordo com valor total ou repetição de categoria")
+	@ParameterizedTest(name = "[{index}]''{0}'' => Preço esperado com desconto: {7}")
+	@CsvSource({
+			"PrecoItensMenor500SemRepeticao, 200, 200, 99, CASA, COZINHA, ELETRONICO, 499.0",
+			"PrecoItensMenor500ComRepeticao, 200, 200, 99, LIVROS, LIVROS, LIVROS, 523.95",
+			"PrecoItensIgual500SemRepeticao, 200, 200, 100, COZINHA, ELETRONICO, LIVROS, 500.0",
+			"PrecoItensIgual500ComRepeticao, 200, 200, 100, ROUPAS, ROUPAS, ROUPAS, 525.0",
+			"PrecoItensMaior500SemRepeticao, 200, 200, 101, ELETRONICO, LIVROS, ROUPAS, 551.1",
+			"PrecoItensMaior500ComRepeticao, 200, 200, 101, CASA, CASA, CASA, 551.1",
+			"PrecoItensMenor1000SemRepeticao, 400, 400, 199, LIVROS, ROUPAS, CASA, 1098.9",
+			"PrecoItensMenor1000ComRepeticao, 400, 400, 199, COZINHA, COZINHA, COZINHA, 1098.9",
+			"PrecoItensIgual1000SemRepeticao, 400, 400, 200, ROUPAS, CASA, COZINHA, 1100.0",
+			"PrecoItensIgual1000ComRepeticao, 400, 400, 200, ELETRONICO, ELETRONICO, ELETRONICO, 1100.0",
+			"PrecoItensMaior1000SemRepeticao, 400, 400, 201, CASA, COZINHA, ELETRONICO, 1201.2",
+			"PrecoItensMaior1000ComRepeticao, 400, 400, 201, LIVROS, LIVROS, LIVROS, 1201.2",
+	})
+	public void TestePrecoItens(String nomeTeste,
+								Double precoItem1,
+								Double precoItem2,
+								Double precoItem3,
+								ItemTipo itemTipo1,
+								ItemTipo itemTipo2,
+								ItemTipo itemTipo3,
+								Double precoItensEsperado) {
+		Endereco endereco =  new Endereco("", 25, "", "", "", Estado.RN);
+		Usuario usuario = new Usuario("", "", "", endereco);
+		Item item1 = new Item("", "", precoItem1, 10.0, itemTipo1);
+		Item item2 = new Item("", "", precoItem2, 10.0, itemTipo2);
+		Item item3 = new Item("", "", precoItem3, 10.0, itemTipo3);
+
+		Pedido pedido = service.finalizar(usuario, Arrays.asList(item1, item2, item3), LocalDate.now());
+
+		Assertions.assertEquals(precoItensEsperado, pedido.getPrecoItens());
+	}
+
 	@DisplayName("Deve ser cobrado valores de frete por kg de carga diferentes e por destino")
 	@ParameterizedTest(name = "[{index}]''{0}'' => Preço esperado do frete: {5}")
 	@CsvSource({
@@ -37,15 +69,14 @@ public class CarrinhoServicoTest {
 			"PesoIgual100RegiaoCentroOeste, 45, 45, 10, GO, 82.5",
 			"PesoIgual100RegiaoNordeste, 45, 45, 10, PI, 75",
 			"PesoMaior100RegiaoSul, 45, 45, 11, PR, 111.1",
-			"PesoMaior100RegiaoSudeste, 45, 45, 11, SE, 101"
+			"PesoMaior100RegiaoNordeste, 45, 45, 11, SE, 101"
 	})
-	public void TestePrecoFrete(
-			String nomeTeste,
-			Double pesoItem1,
-			Double pesoItem2,
-			Double pesoItem3,
-			Estado estado,
-			Double precoFreteEsperado) {
+	public void TestePrecoFrete(String nomeTeste,
+								Double pesoItem1,
+								Double pesoItem2,
+								Double pesoItem3,
+								Estado estado,
+								Double precoFreteEsperado) {
 		Endereco endereco =  new Endereco("", 25, "", "", "", estado);
 		Usuario usuario = new Usuario("", "", "", endereco);
 		Item item1 = new Item("", "", 200.0, pesoItem1, ItemTipo.ELETRONICO);
@@ -57,41 +88,37 @@ public class CarrinhoServicoTest {
 		Assertions.assertEquals(precoFreteEsperado, pedido.getPrecoFrete());
 	}
 
-	@DisplayName("Deve ser cobrado valores de frete por kg de carga diferentes e por destino")
-	@ParameterizedTest(name = "{index} => ''{0}''")
+	@DisplayName("Deve ser somado o preço dos itens com desconto aplicado e preco do frete com taxas")
+	@ParameterizedTest(name = "[{index}]''{0}'' => Preço Total Esperado: {11}")
 	@CsvSource({
-			"TestePesoMenor10RegiaoSul",
-			"TestePesoMenor10RegiaoNordeste",
-			"TestePesoIgual10",
-			"TestePesoMaior10",
-			"TestePesoMenor40",
-			"TestePesoIgual40",
-			"TestePesoMaior40RegiaoSul",
-			"TestePesoMaior40RegiaoNordeste",
-			"TestePesoMenor100",
-			"TestePesoIgual100",
-			"TestePesoMaior100"
+			"PrecoMenor500SemRepeticaoPesoMaior40Nordeste, 200, 200, 99, CASA, COZINHA, ELETRONICO, 35, 4, 2, BA, 529.75",
+			"PrecoIgual500ComRepeticaoPesoMenor100Norte, 200, 200, 100, ROUPAS, ROUPAS, ROUPAS, 45, 45, 9, AC, 606.68",
+			"PrecoMaior500SemRepeticaoPesoMenor10Sul, 200, 200, 101, ELETRONICO, LIVROS, ROUPAS, 3.3, 3.3, 3.3, SC, 551.1",
+			"PrecoMenor1000SemRepeticaoPesoMaior10Sul, 400, 400, 199, LIVROS, ROUPAS, CASA, 4, 4, 4, RS, 1105.5",
+			"PrecoIgual1000SemRepeticaoPesoMaior40Nordeste, 400, 400, 200, ROUPAS, CASA, COZINHA, 35, 4, 2, BA, 1130.75",
+			"PrecoMaior1000SemRepeticaoPesoMaior100Sudeste, 400, 400, 201, CASA, COZINHA, ELETRONICO, 45, 45, 11, SE, 1302.2"
 	})
-	public void TestePrecoItens(String nomeTeste) {
-		Assertions.fail("Teste ainda não foi implementado.");
-	}
+	public void TestePrecoTotal(String nomeTeste,
+								Double precoItem1,
+								Double precoItem2,
+								Double precoItem3,
+								ItemTipo itemTipo1,
+								ItemTipo itemTipo2,
+								ItemTipo itemTipo3,
+								Double pesoItem1,
+								Double pesoItem2,
+								Double pesoItem3,
+								Estado estado,
+								Double precoTotalEsperado
+								) {
+		Endereco endereco =  new Endereco("", 25, "", "", "", estado);
+		Usuario usuario = new Usuario("", "", "", endereco);
+		Item item1 = new Item("", "", precoItem1, pesoItem1, itemTipo1);
+		Item item2 = new Item("", "", precoItem2, pesoItem2, itemTipo2);
+		Item item3 = new Item("", "", precoItem3, pesoItem3, itemTipo3);
 
-	@DisplayName("Deve ser cobrado valores de frete por kg de carga diferentes e por destino")
-	@ParameterizedTest(name = "{index} => ''{0}''")
-	@CsvSource({
-			"TestePesoMenor10RegiaoSul",
-			"TestePesoMenor10RegiaoNordeste",
-			"TestePesoIgual10",
-			"TestePesoMaior10",
-			"TestePesoMenor40",
-			"TestePesoIgual40",
-			"TestePesoMaior40RegiaoSul",
-			"TestePesoMaior40RegiaoNordeste",
-			"TestePesoMenor100",
-			"TestePesoIgual100",
-			"TestePesoMaior100"
-	})
-	public void TestePrecoTotal(String nomeTeste) {
-		Assertions.fail("Teste ainda não foi implementado.");
+		Pedido pedido = service.finalizar(usuario, Arrays.asList(item1, item2, item3), LocalDate.now());
+
+		Assertions.assertEquals(precoTotalEsperado, pedido.getPrecoTotal());
 	}
 }
