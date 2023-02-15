@@ -38,11 +38,11 @@ public class CarrinhoServico {
 		}
 
 		if(total > 1000.0) {
-			total *= 1.2;
+			total *= 0.8;
 		} else if(total > 500.0) {
-			total *= 1.1;
+			total *= 0.9;
 		} else if (elegivelDescontoItemTipo(itens)) {
-			total *= 1.05;
+			total *= 0.95;
 		}
 
 		return total;
